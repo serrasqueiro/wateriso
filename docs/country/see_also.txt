@@ -1,0 +1,18 @@
+# see_also.txt
+
+# See also:
+#	List of Official Short Names of Countries (Country Codes in ISO 3166)
+#	http://fasteri.com/list/2/short-names-of-countries-and-iso-3166-codes
+#
+#	List of Country Code Top Level Domains (ccTLDs)
+#	http://fasteri.com/list/15/country-code-top-level-domains
+
+# The official list of ccTLDs is maintained by IANA:
+#	https://www.iana.org/domains/root/db
+
+# United Nations reference for ISO 3166-1 alpha-3
+#	https://unstats.un.org/unsd/tradekb/Knowledgebase/50347/Country-Code?Keywords=alpha-2
+#
+#	List of partner countries/areas in JSON format (UN numeric codes)
+#	https://comtrade.un.org/data/cache/partnerAreas.json
+# locally stored as: partnerAreas.json
