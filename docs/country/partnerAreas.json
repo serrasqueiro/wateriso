@@ -282,6 +282,7 @@
             "text": "Czechia"
         },
         {
+            "_status": "Formerly used",
             "id": "200",
             "text": "Czechoslovakia"
         },
@@ -414,6 +415,7 @@
             "text": "Fmr Rhodesia Nyas"
         },
         {
+            "_comment": "Former Sudan state",
             "id": "736",
             "text": "Fmr Sudan"
         },
@@ -422,12 +424,14 @@
             "text": "Fmr Tanganyika"
         },
         {
+            "_status": "Exceptionally reserved",
             "id": "810",
-            "text": "Fmr USSR"
+            "text": "USSR"
         },
         {
+            "_status": "Transitionally reserved",
             "id": "890",
-            "text": "Fmr Yugoslavia"
+            "text": "Yugoslavia"
         },
         {
             "id": "836",
@@ -438,7 +442,8 @@
             "text": "Fr. South Antarctic Terr."
         },
         {
-            "id": "251",
+            "_comment": "[HM] see https://www.iso.org/obp/ui/#iso:code:3166:FR",
+            "id": "250",
             "text": "France"
         },
         {
@@ -542,12 +547,9 @@
             "text": "Iceland"
         },
         {
-            "id": "699",
-            "text": "India"
-        },
-        {
+            "_comment": "[HM] see https://www.iso.org/obp/ui/#iso:code:3166:IN",
             "id": "356",
-            "text": "India, excl. Sikkim"
+            "text": "India"
         },
         {
             "id": "360",
@@ -570,7 +572,7 @@
             "text": "Israel"
         },
         {
-            "id": "381",
+            "id": "380",
             "text": "Italy"
         },
         {
@@ -782,7 +784,7 @@
             "text": "Northern Africa, nes"
         },
         {
-            "id": "579",
+            "id": "578",
             "text": "Norway"
         },
         {
@@ -898,6 +900,7 @@
             "text": "Saint Kitts and Nevis"
         },
         {
+            "_comment": "Anguilla is now separate",
             "id": "658",
             "text": "Saint Kitts, Nevis and Anguilla"
         },
@@ -956,10 +959,6 @@
         {
             "id": "694",
             "text": "Sierra Leone"
-        },
-        {
-            "id": "698",
-            "text": "Sikkim"
         },
         {
             "id": "702",
@@ -1030,7 +1029,7 @@
             "text": "Sweden"
         },
         {
-            "id": "757",
+            "id": "756",
             "text": "Switzerland"
         },
         {
@@ -1126,10 +1125,12 @@
             "text": "US Virgin Isds"
         },
         {
-            "id": "842",
-            "text": "USA"
+            "_comment": "USA",
+            "id": "840",
+            "text": "United States of America (the)"
         },
         {
+            "_status": "Obsolete",
             "id": "841",
             "text": "USA (before 1981)"
         },

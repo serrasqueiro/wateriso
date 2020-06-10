@@ -15,6 +15,8 @@ from waxpage.redit import char_map
 ISO_3361_LIST_FILE = "ISO_3361_list.txt"
 PARTNER_AREAS_JSON = "partnerAreas.json"
 
+_IDX_COMMENT = -1
+
 
 def main():
     """ Main script """
@@ -57,7 +59,10 @@ def run_list(out, err, name, debug=0):
     else:
         if debug > 0:
             print(pa)
-    return dump_text(out, err, name, kind, pa)
+    code = dump_text(out, err, name, kind, pa)
+    # Dump whatever was not used
+    dump_partner_areas(pa, err, debug)
+    return code
 
 
 def dump_text(out, err, name, kind, pa, show_area=True, debug=0):
@@ -85,16 +90,34 @@ def dump_text(out, err, name, kind, pa, show_area=True, debug=0):
         out.write("{}\n".format(lean))
         if show_area and pa:
             c_id = lean.split(" ")[2]
-            pa_id = pa.get(c_id)
-            if pa_id:
-                print("#\t{} = {}".format(c_id, pa_id))
+            num_id = int(c_id)
+            tup = pa.get(num_id)
+            if tup:
+                pa_name, _ = tup
+                print("#\t{} = {}".format(c_id, pa_name))
+                assert pa[num_id][1] == []
+                pa[num_id][1].append(line)
             print("")
     return 0
 
 
 def _load_partner_areas(path=None, debug=0):
     """ Best-effort read of partnerAreas.json """
-    pa = dict()
+
+    def _sanity_check(dct):
+        keys = list(dct.keys())
+        keys.sort()
+        if keys[0] == "_comment":
+            del keys[0]
+        if keys[0] == "_status":
+            del keys[0]
+        is_ok = keys == ["id", "text"]
+        if not is_ok:
+            print("Uops:", dct)
+        return is_ok
+
+    pa = {_IDX_COMMENT: ("_comment", dict(),)
+          }
     if path is None:
         table = PARTNER_AREAS_JSON
     else:
@@ -111,11 +134,40 @@ def _load_partner_areas(path=None, debug=0):
     there = full["results"]
     for entry in there:
         c_id, text = entry["id"], entry["text"]
+        comment = entry.get("_comment")
+        if entry.get("_status"):
+            comment = "STATUS: {}".format(entry["_status"])  # Status overrides comment!
+        assert _sanity_check(entry)
         if c_id == "all":
             continue
-        assert int(c_id) >= 0
-        pa[c_id] = text
+        num_id = int(c_id)
+        assert num_id >= 0
+        pa[num_id] = (text, [])
+        if comment:
+            pa[_IDX_COMMENT][1][num_id] = comment
     return pa
+
+
+def dump_partner_areas(pa, err, debug=0):
+    msgs = dict()
+    if pa is None:
+        return -1
+    for c_id, (utf_text, hit) in pa.items():
+        text = simple_ascii(utf_text)
+        comment = pa[_IDX_COMMENT][1].get(c_id)
+        s_extra = " ; # {}".format(comment) if comment else ""
+        if debug > 0:
+            print("Debug: pa[{}] = ({}, {})"
+                  "".format(c_id, text, hit))
+        elif c_id > 0:
+            if hit == []:
+                msg = "No hit for pa[{}] = {}{}".format(c_id, text, s_extra)
+                msgs[c_id] = msg
+    keys = list(msgs.keys())
+    keys.sort()
+    for key in keys:
+        err.write("{}\n".format(msgs[key]))
+    return 0
 
 
 def simple_ascii(s, special=None):
