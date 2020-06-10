@@ -16,3 +16,6 @@
 #	List of partner countries/areas in JSON format (UN numeric codes)
 #	https://comtrade.un.org/data/cache/partnerAreas.json
 # locally stored as: partnerAreas.json
+
+To list every two-letter country:
+	% python iso3361_listing.py | grep -v ^"#" | grep ^. | awk '{print $1}' | tr \\012 ';'
