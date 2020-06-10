@@ -9,8 +9,10 @@ This module lists ISO-3361 text files comprehensively
 
 import sys
 import json
+import os.path
 from waxpage.redit import char_map
 
+ISO_3361_LIST_FILE = "ISO_3361_list.txt"
 PARTNER_AREAS_JSON = "partnerAreas.json"
 
 
@@ -31,7 +33,7 @@ def runner(out, err, args):
     if args:
         param = args
     else:
-        param = ["ISO_3361_list.txt"]
+        param = [os.path.join(my_path(), ISO_3361_LIST_FILE)]
     name = param[0]
     del param[0]
     if param:
@@ -81,22 +83,31 @@ def dump_text(out, err, name, kind, pa, show_area=True, debug=0):
             s = plain
         lean = s.replace("_", " ")
         out.write("{}\n".format(lean))
-        c_id = lean.split(" ")[2]
-        pa_id = pa.get(c_id)
-        if show_area:
+        if show_area and pa:
+            c_id = lean.split(" ")[2]
+            pa_id = pa.get(c_id)
             if pa_id:
                 print("#\t{} = {}".format(c_id, pa_id))
             print("")
     return 0
 
 
-def _load_partner_areas():
+def _load_partner_areas(path=None, debug=0):
     """ Best-effort read of partnerAreas.json """
     pa = dict()
+    if path is None:
+        table = PARTNER_AREAS_JSON
+    else:
+        table = path
     try:
-        full = json.load(open(PARTNER_AREAS_JSON))
+        full = json.load(open(table))
     except FileNotFoundError:
-        return None
+        full = None
+    if full is None and path is None:
+        table = os.path.join(my_path(), table)
+        if debug > 0:
+            print("Debug: Retrying:", table)
+        full = json.load(open(table))
     there = full["results"]
     for entry in there:
         c_id, text = entry["id"], entry["text"]
@@ -122,6 +133,16 @@ def simple_ascii(s, special=None):
             to_s = char_map.simpler_ascii(a_chr)
         plain += to_s
     return plain
+
+
+def my_path():
+    """ My script path """
+    return os.path.dirname(_script_path())
+
+
+def _script_path():
+    """ This script's complete filename """
+    return os.path.abspath(__file__)
 
 
 #
